@@ -169,15 +169,72 @@ def predict(w , b , X ):
 
     m  = X.shape[1] #图片的数量
     Y_prediction = np.zeros((1,m)) 
-    w = w.reshape(X.shape[0],1)
+    w = w.reshape(X.shape[0],1) #到时候还要转置的
 
     #计预测猫在图片中出现的概率
     A = sigmoid(np.dot(w.T , X) + b)
     for i in range(A.shape[1]):
         #将概率a [0，i]转换为实际预测p [0，i]
+        #  这一个循环不是太懂
         Y_prediction[0,i] = 1 if A[0,i] > 0.5 else 0
     #使用断言
     assert(Y_prediction.shape == (1,m))
-
     return Y_prediction
 
+
+def model(X_train , Y_train , X_test , Y_test , num_iterations = 2000 , learning_rate = 0.5 , print_cost = False): """
+    通过调用之前实现的函数来构建逻辑回归模型
+
+    参数：
+        X_train  - numpy的数组,维度为（num_px * num_px * 3，m_train）的训练集
+        Y_train  - numpy的数组,维度为（1，m_train）（矢量）的训练标签集
+        X_test   - numpy的数组,维度为（num_px * num_px * 3，m_test）的测试集
+        Y_test   - numpy的数组,维度为（1，m_test）的（向量）的测试标签集
+        num_iterations  - 表示用于优化参数的迭代次数的超参数
+        learning_rate  - 表示optimize（）更新规则中使用的学习速率的超参数
+        print_cost  - 设置为true以每100次迭代打印成本
+
+    返回：
+        d  - 包含有关模型信息的字典。
+    """
+    #  这行代码怎么运行
+    w , b = initialize_with_zeros(X_train.shape[0])
+
+    #  把对应的函数都引用，不是太懂为什么不能直接引用
+    parameters , grads , costs = optimize(w , b , X_train , Y_train,num_iterations , learning_rate , print_cost)
+
+    #从字典“参数”中检索参数w和b
+    w , b = parameters["w"] , parameters["b"]
+
+    #预测测试/训练集的例子
+    Y_prediction_test = predict(w , b, X_test)
+    Y_prediction_train = predict(w , b, X_train)
+
+    #打印训练后的准确性
+    #  np.mean是取算术平均值,np.abs是取绝对值
+    #  format函数还是不知道用法
+    print("训练集准确性："  , format(100 - np.mean(np.abs(Y_prediction_train - Y_train)) * 100) ,"%")
+    print("测试集准确性："  , format(100 - np.mean(np.abs(Y_prediction_test - Y_test)) * 100) ,"%")
+
+    d = {
+            "costs" : costs,
+            "Y_prediction_test" : Y_prediction_test,
+            "Y_prediciton_train" : Y_prediction_train,
+            "w" : w,
+            "b" : b,
+            "learning_rate" : learning_rate,
+            "num_iterations" : num_iterations }
+    return d
+
+#  调用总的函数计算结果
+d = model(train_set_x, train_set_y, test_set_x, test_set_y, num_iterations = 2000, learning_rate = 0.005, print_cost = True)
+
+
+#绘制图
+还是搞不懂为什么要squeeze
+costs = np.squeeze(d['costs'])
+plt.plot(costs)
+plt.ylabel('cost')
+plt.xlabel('iterations (per hundreds)')
+plt.title("Learning rate =" + str(d["learning_rate"]))
+plt.show()
