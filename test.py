@@ -1,12 +1,15 @@
-import matplotlib.pyplot as plt
+print()
+print("hhllo sorld") 
+a = 123
+    # a = a+1
+a = a+1
+a = a-2       
 
-a = [1, 2, 3, 4] # y 是 a的值，x是各个元素的索引
-b = [5, 6, 7, 8]
-
-plt.plot(a, b, 'r--', label = 'aa')
-plt.xlabel('this is x')
-plt.ylabel('this is y')
-plt.title('this is a demo')
-plt.legend() # 将样例显示出来
-
-plt.show()
+a = 2 + 3
+print("this is the file is in the ")
+print(a)
+print("")
+a = a+1
+a = a+1
+a = a-2
+print(a)

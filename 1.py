@@ -1,14 +1,20 @@
+# numpy这个库是用于科学计算
 import numpy as np
+# matplotlib这个库是用来构建图像的
 import matplotlib.pyplot as plt
+# h5py这个库使用来读取h5py类型的文件
 import h5py
+# 这个是数据集
 from lr_utils import load_dataset
 
+# 把load_dataset中要调用的函数都引入这个文件中
 train_set_x_orig , train_set_y , test_set_x_orig , test_set_y , classes = load_dataset()
+# .shape[]中的变量1为行数，2为列数，如此类推
 m_train = train_set_y.shape[1] #训练集里图片的数量。
 m_test = test_set_y.shape[1] #测试集里图片的数量。
 num_px = train_set_x_orig.shape[1] #训练、测试集里面的图片的宽度和高度（均为64x64）。
-
 #现在看一看我们加载的东西的具体情况
+# str是为了把变量类型变为字符串类
 print ("训练集的数量: m_train = " + str(m_train))
 print ("测试集的数量 : m_test = " + str(m_test))
 print ("每张图片的宽/高 : num_px = " + str(num_px))
@@ -26,8 +32,10 @@ print ("训练集_标签的维数 : " + str(train_set_y.shape))
 print ("测试集降维之后的维度: " + str(test_set_x_flatten.shape))
 print ("测试集_标签的维数 : " + str(test_set_y.shape))
 
+# 这里是为了把数据标准化，把其控制在0-1之间
 train_set_x = train_set_x_flatten / 255
 test_set_x = test_set_x_flatten / 255
+# 上面都是在读取数据和处理数据
 
 def sigmoid(z):
     """
